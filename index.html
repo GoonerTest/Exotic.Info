@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Exotic.Info Menu</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DynaPuff&display=swap');
 
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'DynaPuff', cursive;
+    overflow: hidden;
+  }
+
+  body {
+    background: black;
+    position: relative;
+  }
+
+  /* Initial blur overlay */
+  #blurOverlay {
+    position: fixed;
+    inset: 0;
+    background: black;
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: opacity 0.7s ease;
+  }
+
+  #blurOverlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #blurOverlay span {
+    font-weight: bold;
+    font-size: 3rem;
+    color: #fff;
+    text-shadow:
+      0 0 8px #fff,
+      0 0 20px #fff,
+      0 0 30px #fff;
+    user-select: none;
+  }
+
+  /* Background GIF blurred */
+  #backgroundGif {
+    position: fixed;
+    inset: 0;
+    background: url('https://i.pinimg.com/originals/88/e5/54/88e5540465d258ab1d271bfc11189533.gif') center/cover no-repeat;
+    filter: blur(15px);
+    z-index: -1;
+  }
+
+  /* Audio hidden */
+  audio {
+    display: none;
+  }
+
+  /* Glass menu container */
+  #menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255 255 255 / 0.15);
+    border-radius: 20px;
+    box-shadow:
+      0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255 255 255 / 0.25);
+    width: 320px;
+    padding: 30px 20px;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    font-family: 'DynaPuff', cursive;
+    user-select: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.7s ease;
+  }
+
+  #menu.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #menu img#topImage {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 6px #fff);
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  #menu h1 {
+    font-size: 2.8rem;
+    margin: 0 0 25px 0;
+    color: #fff;
+    text-shadow:
+      0 0 10px #fff,
+      0 0 20px #fff,
+      0 0 30px #fff;
+  }
+
+  /* Buttons container */
+  #buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+  }
+
+  .btn-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    filter: drop-shadow(0 0 6px #fff);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .btn-link img {
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+  }
+
+  /* Glow only on menu hover, no scale */
+  #menu:hover {
+    box-shadow:
+      0 0 15px #fff,
+      0 0 30px #fff,
+      0 0 45px #fff;
+  }
+
+  /* Buttons pop-up and glow on hover */
+  .btn-link:hover {
+    animation: popupGlow 0.4s forwards;
+    box-shadow:
+      0 0 15px #fff,
+      0 0 30px #fff,
+      0 0 45px #fff;
+  }
+
+  @keyframes popupGlow {
+    0% {
+      transform: scale(1);
+      box-shadow:
+        0 0 6px #fff;
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow:
+        0 0 20px #fff,
+        0 0 40px #fff,
+        0 0 60px #fff;
+    }
+    100% {
+      transform: scale(1);
+      box-shadow:
+        0 0 15px #fff,
+        0 0 30px #fff,
+        0 0 45px #fff;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Initial Blur overlay -->
+<div id="blurOverlay"><span>click to open</span></div>
+
+<!-- Background blurred GIF -->
+<div id="backgroundGif" style="display:none;"></div>
+
+<!-- Audio -->
+<audio id="bgAudio" src="https://cdn.discordapp.com/attachments/1306324562975129701/1386917480680915056/comet_clean.wav?ex=685b730f&is=685a218f&hm=a7ac4ec0af3c099f49acd79c2307cf8e5ce4e307f32a0821f29549afe2e82e76&" loop></audio>
+
+<!-- Glass menu -->
+<div id="menu">
+  <img id="topImage" src="https://media.discordapp.net/attachments/1306324563134517359/1386907883064655922/bc49f2e5-5c8d-42e8-865d-9f49bc257b6b.jpg?ex=685b6a1e&is=685a189e&hm=210ddf0d94fc6a9ea9ef0eae642348d083aba882686b1731639f399adf4e58c4&=&format=webp&width=291&height=350" alt="Menu Image" />
+  <h1>Exotic.Info</h1>
+  <div id="buttons">
+    <a href="https://discord.com/users/1210829279609233470" target="_blank" title="Button 1" class="btn-link">
+      <img src="https://img.icons8.com/?size=100&id=30888&format=png&color=000000" alt="Btn1"/>
+    </a>
+    <a href="https://www.roblox.com/users/8191363157/profile" target="_blank" title="Button 2" class="btn-link">
+      <img src="https://img.icons8.com/?size=100&id=97652&format=png&color=000000" alt="Btn2"/>
+    </a>
+    <a href="https://cdn.discordapp.com/attachments/1306324563134517359/1386913979170951199/IMG_3361.jpg?ex=685b6fcc&is=685a1e4c&hm=69c3af90745ee20fc7a37331c1b665d037498cda7cdee641b6c857d4ca258c94&" target="_blank" title="Button 3" class="btn-link">
+      <img src="https://img.icons8.com/?size=100&id=23026&format=png&color=000000" alt="Btn3"/>
+    </a>
+    <a href="" target="_blank" title="Button 4" class="btn-link">
+      <img src="https://i.pinimg.com/736x/48/eb/44/48eb44dbad07b0aea0ee2b06518121f6.jpg" alt="Btn4"/>
+    </a>
+  </div>
+</div>
+
+<script>
+  const blurOverlay = document.getElementById('blurOverlay');
+  const backgroundGif = document.getElementById('backgroundGif');
+  const menu = document.getElementById('menu');
+  const audio = document.getElementById('bgAudio');
+
+  blurOverlay.addEventListener('click', () => {
+    // Fade out overlay
+    blurOverlay.classList.add('hidden');
+
+    // Show background GIF
+    backgroundGif.style.display = 'block';
+
+    // Show menu with fade in
+    setTimeout(() => {
+      menu.classList.add('show');
+    }, 700);
+
+    // Play audio
+    audio.play().catch(() => {
+      // Autoplay might be blocked, try to resume on next interaction
+      document.body.addEventListener('click', () => audio.play(), { once: true });
+    });
+  });
+</script>
+
+</body>
+</html>
